@@ -1,3 +1,4 @@
+---
 
 nry-genshin-db-api
 
