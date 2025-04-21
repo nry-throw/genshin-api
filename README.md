@@ -1,6 +1,6 @@
 ---
 
-nry-genshin-db-api
+##nry genshin api
 
 Web API untuk genshin-db menggunakan Vercel serverless function.
 
