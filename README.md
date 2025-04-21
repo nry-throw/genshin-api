@@ -1,96 +1,156 @@
-# genshin-db-api
- 
-Web API for [genshin-db](https://www.npmjs.com/package/genshin-db) using Vercel serverless function.
+---
 
-You can access v4 style data by switch `/v5` with `/v4`.
+nry-genshin-db-api
 
-## [folder]?query=[query]
-https://genshin-db-api.vercel.app/api/v5/characters?query=hutao  
-Returns the search result for the specified folder and query.  
-You'll have to retrieve stats for characters/talents/weapons using the stats API.
+Web API untuk genshin-db menggunakan Vercel serverless function.
 
-You may include standard genshindb options as url query parameters (case-sensitive):
-- dumpResult // The query result will return an object with the properties: { query, folder, match, matchtype, options, filename, result }.
-- matchNames // Allows the matching of names.
-- matchAltNames // Allows the matching of alternate or custom names.
-- matchAliases // Allows the matching of aliases. These are searchable fields that returns the data object the query matched in.
-- matchCategories // Allows the matching of categories. If true, then returns an array if it matches.
-- verboseCategories // Used if a category is matched. If true, then replaces each string name in the array with the data object instead.
-- queryLanguages // Comma separated list of languages that your query will be searched in.
-- resultLanguage // Output language that you want your results to be in.
+Kamu dapat mengakses data gaya v4 dengan mengganti /v5 menjadi /v4.
 
-Examples:  
-https://genshin-db-api.vercel.app/api/v5/characters?query=hutao  
-https://genshin-db-api.vercel.app/api/v5/characters?query=胡桃&queryLanguages=chinese&resultLanguage=chinese  
-https://genshin-db-api.vercel.app/api/v5/talents?query=slime&matchCategories=true&queryLanguages=english,jap  
-https://genshin-db-api.vercel.app/api/v5/weapons?query=skywardharp&dumpResult=true&resultLanguage=korean
 
-### [folder]?query=names&matchCategories=true
-https://genshin-db-api.vercel.app/api/v5/characters?query=names&matchCategories=true  
-Returns a list of names for the specified folder.
+---
 
-You may also include the option verboseCategories to get a list of data objects instead of a list of names.
+[folder]?query=[query]
 
-## config
-https://genshin-db-api.vercel.app/api/v5/config  
-Returns the following:
-- list of folders
-- list of languages
-- the default options used by the api
-- list of category values for each folder
+Contoh:
 
-You can use `resultLanguage` to get category values for other languages.  
-Example:  
-https://genshin-db-api.vercel.app/api/v5/config?resultLanguage=spanish  
+https://nry-api.vercel.app/api/v5/characters?query=hutao
 
-## folders
-https://genshin-db-api.vercel.app/api/v5/folders  
-Returns the list of folders.
+Mengembalikan hasil pencarian berdasarkan folder dan query yang diberikan.
+Untuk statistik karakter, talenta, atau senjata, gunakan endpoint /stats.
 
-## languages
-https://genshin-db-api.vercel.app/api/v5/languages  
-Returns the list of languages.
+Parameter opsional (case-sensitive):
 
-## categories
-https://genshin-db-api.vercel.app/api/v5/categories  
-Returns the category values for every folder.
+dumpResult - Mengembalikan objek dengan properti: { query, folder, match, matchtype, options, filename, result }
 
-You can use `resultLanguage` to get category values for other languages.  
-Example:  
-https://genshin-db-api.vercel.app/api/v5/categories?resultLanguage=spanish  
+matchNames - Mencocokkan nama karakter
 
-## stats?folder=[folder]&query=[query]
-https://genshin-db-api.vercel.app/api/v5/stats?folder=characters&query=hutao  
-Returns the stats for every level for the specified folder and query as a JSON map.  
-Ascended stats are mapped with a '+' like '80+'.  
-Only for `characters` and `weapons` folder.  
+matchAltNames - Mencocokkan nama alternatif/kustom
 
-You may include standard genshindb options as url query parameters (case-sensitive).  
-Adding `dumpResult=true` will allow you to get the data object of the character/weapon being searched.
-You may include `level` as a query parameter to get the stats for a specific level.  
-Examples:  
-https://genshin-db-api.vercel.app/api/v5/stats?folder=characters&query=胡桃&queryLanguages=chinese  
-https://genshin-db-api.vercel.app/api/v5/stats?folder=weapons&query=jadespear&level=90  
-https://genshin-db-api.vercel.app/api/v5/stats?folder=characters&query=hutao&dumpResult=true  
-https://genshin-db-api.vercel.app/api/v5/stats?folder=characters&query=ganyu&level=60+  
+matchAliases - Mencocokkan alias
 
-## tcgdeckshare/decode?code=[deckcode]
-https://genshin-db-api.vercel.app/api/tcgdeckshare/decode?code=A0Bw8TQPARBw8pcPCSBw9cIPDFAg9sgQDAGAAMkQDCGQCdkQDaGQC+MQDrEwDOQQDsAA  
-Converts a tcg deck share code into an array of card share ids.
+matchCategories - Jika true, mengembalikan array kategori jika cocok
 
-Returns an object with the properties:
-- `deckcode`
+verboseCategories - Jika true, menggantikan string dalam array kategori dengan objek data
 
-## tcgdeckshare/encode?deck=[cardids]
-https://genshin-db-api.vercel.app/api/tcgdeckshare/encode?deck=55,52,23,151,151,194,194,200,200,201,201,217,217,227,227,228,228,241,241,242,242,245,245,246,256,256,258,265,266,267,267,268,268
-Converts a comma-separated array of card share ids into a tcg deck share code.
+queryLanguages - Bahasa pencarian, pisahkan dengan koma
 
-You can an `offset` query parameter to generate a different deck share code for the same deck. This is useful for the extremely rare case where the deck share code is invalid because it contains a bad word.
-Example:
-https://genshin-db-api.vercel.app/api/tcgdeckshare/encode?offset=1&deck=55,52,23,151,151,194,194,200,200,201,201,217,217,227,227,228,228,241,241,242,242,245,245,246,256,256,258,265,266,267,267,268,268
+resultLanguage - Bahasa hasil yang diinginkan
 
-Returns a string.
 
-## tcgdeckshare/getdata?code=[deckcode]&deck=[cardids]
-https://genshin-db-api.vercel.app/api/tcgdeckshare/decode?code=A0Bw8TQPARBw8pcPCSBw9cIPDFAg9sgQDAGAAMkQDCGQCdkQDaGQC+MQDrEwDOQQDsAA  
+Contoh lain:
 
+https://nry-api.vercel.app/api/v5/characters?query=胡桃&queryLanguages=chinese&resultLanguage=chinese
+https://nry-api.vercel.app/api/v5/weapons?query=skywardharp&dumpResult=true&resultLanguage=korean
+
+
+---
+
+[folder]?query=names&matchCategories=true
+
+https://nry-api.vercel.app/api/v5/characters?query=names&matchCategories=true
+
+Mengembalikan daftar nama dalam folder tersebut.
+Tambahkan verboseCategories=true untuk mengembalikan objek data, bukan hanya nama.
+
+
+---
+
+/config
+
+https://nry-api.vercel.app/api/v5/config
+
+Mengembalikan:
+
+Daftar folder
+
+Daftar bahasa
+
+Opsi default
+
+Nilai kategori setiap folder
+
+
+Gunakan resultLanguage untuk melihat hasil dalam bahasa tertentu:
+
+https://nry-api.vercel.app/api/v5/config?resultLanguage=spanish
+
+
+---
+
+/folders
+
+https://nry-api.vercel.app/api/v5/folders
+
+Mengembalikan daftar semua folder yang tersedia.
+
+
+---
+
+/languages
+
+https://nry-api.vercel.app/api/v5/languages
+
+Mengembalikan daftar bahasa yang didukung.
+
+
+---
+
+/categories
+
+https://nry-api.vercel.app/api/v5/categories
+
+Mengembalikan nilai kategori untuk setiap folder.
+Tambahkan resultLanguage untuk hasil berbahasa lain.
+
+
+---
+
+/stats?folder=[folder]&query=[query]
+
+https://nry-api.vercel.app/api/v5/stats?folder=characters&query=hutao
+
+Mengembalikan statistik tiap level untuk karakter/senjata.
+Gunakan level untuk hasil level tertentu (misal: level=80+).
+Tambahkan dumpResult=true untuk mendapatkan objek datanya.
+
+Contoh lainnya:
+
+https://nry-api.vercel.app/api/v5/stats?folder=characters&query=ganyu&level=60+
+https://nry-api.vercel.app/api/v5/stats?folder=weapons&query=jadespear&level=90
+
+
+---
+
+/tcgdeckshare/decode?code=[deckcode]
+
+https://nry-api.vercel.app/api/tcgdeckshare/decode?code=A0Bw8TQPARBw8pcPCSBw9cIPDFAg9sgQDAGAAMkQDCGQCdkQDaGQC+MQDrEwDOQQDsAA
+
+Mengubah deckcode TCG menjadi array ID kartu.
+
+Hasil:
+
+{
+  "deckcode": "A0Bw8TQPAR..."
+}
+
+
+---
+
+/tcgdeckshare/encode?deck=[cardids]
+
+https://nry-api.vercel.app/api/tcgdeckshare/encode?deck=55,52,23,...
+
+Mengubah array ID kartu menjadi kode deck TCG.
+Gunakan offset jika kode mengandung kata yang diblokir:
+
+https://nry-api.vercel.app/api/tcgdeckshare/encode?offset=1&deck=55,52,23,...
+
+
+---
+
+/tcgdeckshare/getdata?code=[deckcode]&deck=[cardids]
+
+Untuk mendapatkan data gabungan berdasarkan deckcode dan ID kartu.
+
+
+---
