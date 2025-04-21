@@ -1,7 +1,7 @@
 
 # nry genshin api
 
-Web API untuk genshin-db menggunakan Vercel serverless function.
+Web source API untuk genshin menggunakan Vercel serverless function.
 
 Kamu dapat mengakses data gaya v4 dengan mengganti /v5 menjadi /v4.
 
